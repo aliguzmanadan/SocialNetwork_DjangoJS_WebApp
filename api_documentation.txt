@@ -16,3 +16,16 @@ fetch('/posts', {
     console.log(result);
 });
 //////////////////////////////////////////
+
+
+2. Get list of posts:
+You only need to provide a valid set_name, (i.e. "all", "following", "own") to get a list in JSON form with all the posts
+
+///////////////////////////////////////////
+fetch('/posts/<set_name>')
+.then(response => response.json())
+.then(posts => {
+    // Print emails
+    console.log(posts);
+});
+///////////////////////////////////////////

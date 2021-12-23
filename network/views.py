@@ -88,3 +88,20 @@ def new_post(request):
     new_post.save()
 
     return JsonResponse({"message": "Post saveds successfully."}, status=201)
+
+@login_required
+def get_posts(request, set_name):
+    
+    #Filter posts based on set_name
+    if set_name == "all":
+        posts = Post.objects.all()
+    elif set_name == "following":
+        posts = Post.objects.filter(poster__in = request.user.follows.all())
+    elif set_name == "own":
+        posts = Post.objects.filter(poster = request.user)
+    else:
+        return JsonResponse({"error": "Invalid set of posts"}, status=400)
+
+    #return posts in reverse chronological order
+    posts = posts.order_by("-timestamp").all()
+    return JsonResponse([post.serialize() for post in posts], safe=False)
