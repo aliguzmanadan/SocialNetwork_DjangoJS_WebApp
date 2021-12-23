@@ -87,4 +87,4 @@ def new_post(request):
     new_post = Post(poster = request.user, content=content)
     new_post.save()
 
-    return JsonResponse({"message": "Post save successfully."}, status=201)
+    return JsonResponse({"message": "Post saveds successfully."}, status=201)

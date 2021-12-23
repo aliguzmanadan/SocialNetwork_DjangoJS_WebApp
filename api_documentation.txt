@@ -4,10 +4,10 @@ The route requires tonly one pice of data to be submitted: the content of the po
  For example, you could write JavaScript code like
 
 ///////////////////////////////////////////
-fetch('/emails', {
-  method: 'POST'
+fetch('/posts', {
+  method: 'POST',
   body: JSON.stringify({
-      content: 'post content'
+      content: "post content"
   })
 })
 .then(response => response.json())
