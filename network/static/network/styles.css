@@ -10,6 +10,15 @@ form{
     margin-bottom: 0px;
 }
 
+.bi{
+    color: red;
+    width: 1em;
+}
+
+#likes_number{
+    margin-left: 10px;
+}
+
 #post_submit{
     margin-top: 10px;
 }

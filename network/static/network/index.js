@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Use links in the top of the page to toggle between views
     document.querySelector('#all_posts_link').addEventListener('click', () => load_posts('all'));
     document.querySelector('#following_link').addEventListener('click', () => load_posts('following'));
-    document.querySelector('#post_form').addEventListener('submit', () => submit_post());
+    document.querySelector('#post_form').onsubmit =  () => {return submit_post()};
    
     // By default, load all posts
     load_posts('all');
@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function load_posts(posts_set){
     document.querySelector('#session_name').innerHTML = `<h3>${posts_set.charAt(0).toUpperCase() + posts_set.slice(1)}</h3>`;
+
+    //Clearing posts view
+    document.querySelector('#session_posts').innerHTML = "";
 
     //Getting posts
     fetch(`/posts/${posts_set}`)
@@ -45,10 +48,15 @@ function display_post(post){
 
     let timestamp = document.createElement('p');
     timestamp.className = "card-text";
-    timestamp.innerHTML = `<small class="text-muted">${post.timestamp}</small>`
+    timestamp.innerHTML = `<small class="text-muted">${post.timestamp}</small>`;
+
+    let likes = document.createElement('i');
+    likes.className = "bi bi-suit-heart-fill";
+    likes.innerHTML = `<small class="text-muted" id="likes_number">0</small>`;
+
 
     //Assemble post
-    body.append(content, timestamp);
+    body.append(content, timestamp, likes);
     div_post.append(body);
     document.querySelector('#session_posts').append(div_post);
 
@@ -75,6 +83,14 @@ function submit_post(){
           // Print result
           console.log(result);
       });
+
+    //clear test area of the form, and go all posts
+    document.querySelector('#content').value = "";
+    load_posts('all');
+
+
+    //Stop form from submitting
+    return false;
 }
 
 
