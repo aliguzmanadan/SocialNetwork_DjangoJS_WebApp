@@ -1,7 +1,7 @@
 import json
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, request
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -68,6 +68,17 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
+
+def user_page(request, username):
+
+    #Get user 
+    user = User.objects.get(username = username)
+
+    #Render user page
+    return render(request, "network/user_page.html", {
+        "user": user
+    })
+
 #########################################################################
 #API views
 
@@ -96,7 +107,7 @@ def get_posts(request, set_name):
     if set_name == "all":
         posts = Post.objects.all()
     elif set_name == "following":
-        posts = Post.objects.filter(poster__in = request.user.follows.all())
+        posts = Post.objects.filter(poster__in = request.user.set_following())
     elif set_name == "own":
         posts = Post.objects.filter(poster = request.user)
     else:

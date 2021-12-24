@@ -1,0 +1,12 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+    {{ user.username }}
+    Followers {{user.NumberFollowers}}
+    
+    {{user.NumberFollowing}}
+{% endblock %}
+
+{% block script %}
+{% endblock %}

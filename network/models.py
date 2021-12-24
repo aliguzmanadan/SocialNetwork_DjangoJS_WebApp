@@ -1,11 +1,36 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models.base import Model
 from django.db.models.fields import TextField
 from django.db.models.fields.related import ForeignKey, ManyToManyField
 
+import network
+
 
 class User(AbstractUser):
-    follows = ManyToManyField("self", blank=True, related_name="followers")
+
+    def set_following(self):
+        """Returns a set with all Users followed by this user"""
+        return set([rel.followed for rel in self.followed.all()])
+
+    def set_followers(self):
+        """Returns a se wtith all followers of this user"""
+        return set([rel.follower for rel in self.followers.all()])
+
+    def NumberFollowers(self):
+        return len(self.set_followers())
+
+    def NumberFollowing(self):
+        return len(self.set_following())
+
+#Create a separate class "Following" to instance each following relation.
+class Following(models.Model):
+    followed = ForeignKey(User, on_delete=models.CASCADE, related_name="followers")
+    follower = ForeignKey(User, on_delete=models.CASCADE, related_name="followed")
+
+    def __str__(self):
+        return f"Follower: {self.follower}, Followed: {self.followed}"
+
 
 class Post(models.Model):
     poster = ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
