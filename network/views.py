@@ -98,9 +98,9 @@ def new_post(request):
     new_post = Post(poster = request.user, content=content)
     new_post.save()
 
-    return JsonResponse({"message": "Post saveds successfully."}, status=201)
+    return JsonResponse({"message": "Post saved successfully."}, status=201)
 
-@login_required
+
 def get_posts(request, set_name):
     
     #Filter posts based on set_name

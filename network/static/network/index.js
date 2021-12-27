@@ -1,12 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
 
+    
+
     // Use links in the top of the page to toggle between views
     document.querySelector('#all_posts_link').addEventListener('click', () => load_posts('all'));
     document.querySelector('#following_link').addEventListener('click', () => load_posts('following'));
     document.querySelector('#post_form').onsubmit =  () => {return submit_post()};
-   
+
     // By default, load all posts
     load_posts('all');
+   
+    
   });
 
 
@@ -84,7 +88,7 @@ function submit_post(){
           console.log(result);
       });
 
-    //clear test area of the form, and go all posts
+    //clear test area of the form, and load all posts
     document.querySelector('#content').value = "";
     load_posts('all');
 
