@@ -2,10 +2,20 @@
 {% load static %}
 
 {% block body %}
-    {{ user.username }}
-    Followers {{user.NumberFollowers}}
+    <div>
+        <h3> {{ user.username }} </h3>
+    </div>
+
+    <div>
+        <ul>
+            <li>Followers: {{user.NumberFollowers}}</li>
+            <li>Followong: {{user.NumberFollowing}}</li>
+        </ul>
+    </div>
     
-    {{user.NumberFollowing}}
+    
+    
+    
 {% endblock %}
 
 {% block script %}

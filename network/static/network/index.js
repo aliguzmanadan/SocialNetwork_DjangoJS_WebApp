@@ -44,7 +44,7 @@ function display_post(post){
 
     let body = document.createElement('div');
     body.className = "card-body";
-    body.innerHTML = `<h5 class="card-title"> ${post.poster} </h5>`
+    body.innerHTML = `<h5 class="card-title"> <a  href="/user/${post.poster}">${post.poster}</a> </h5>`
 
     let content = document.createElement('p');
     content.className = "card-text";
@@ -88,9 +88,8 @@ function submit_post(){
           console.log(result);
       });
 
-    //clear test area of the form, and load all posts
-    document.querySelector('#content').value = "";
-    load_posts('all');
+    //Reload page
+    window.location.reload(true);
 
 
     //Stop form from submitting
