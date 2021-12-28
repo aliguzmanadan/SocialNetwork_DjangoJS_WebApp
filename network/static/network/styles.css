@@ -15,6 +15,10 @@ form{
     width: 1em;
 }
 
+.alert{
+    margin: 10px;
+}
+
 #likes_number{
     margin-left: 10px;
 }

@@ -1,0 +1,11 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div id="session_name">
+        <h5>Following</h5>
+    </div>
+
+    {% include "./display_posts.html" %}
+
+{% endblock %}

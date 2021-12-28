@@ -1,18 +1,19 @@
+//import { load_posts,  submit_post} from './functions.js';
+
 document.addEventListener('DOMContentLoaded', function() {
 
     
 
     // Use links in the top of the page to toggle between views
-    document.querySelector('#all_posts_link').addEventListener('click', () => load_posts('all'));
-    document.querySelector('#following_link').addEventListener('click', () => load_posts('following'));
+    //document.querySelector('#all_posts_link').addEventListener('click', () => load_posts('all'));
+    //document.querySelector('#following_link').addEventListener('click', () => load_posts('following'));
     document.querySelector('#post_form').onsubmit =  () => {return submit_post()};
 
     // By default, load all posts
-    load_posts('all');
+    //load_posts('all');
    
     
   });
-
 
 ////////////////
 
@@ -28,6 +29,7 @@ function load_posts(posts_set){
     .then(posts => {
         // Print posts in cosole
         console.log(posts);
+        console.log(typeof posts)
 
         //display each post
         posts.forEach(post => display_post(post));
@@ -44,7 +46,7 @@ function display_post(post){
 
     let body = document.createElement('div');
     body.className = "card-body";
-    body.innerHTML = `<h5 class="card-title"> <a  href="/user/${post.poster}">${post.poster}</a> </h5>`
+    body.innerHTML = `<h5 class="card-title"> <a href="/user/${post.poster}">${post.poster}</a> </h5>`
 
     let content = document.createElement('p');
     content.className = "card-text";
@@ -95,6 +97,3 @@ function submit_post(){
     //Stop form from submitting
     return false;
 }
-
-
-

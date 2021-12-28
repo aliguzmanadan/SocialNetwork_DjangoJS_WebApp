@@ -1,21 +1,82 @@
 import json
 from django.contrib.auth import authenticate, login, logout
+from django.core import paginator
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, request
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-
-
-
+from django.core.paginator import Paginator
 
 from .models import Post, User
 
 
 def index(request):
-    return render(request, "network/index.html")
+    all_posts = Post.objects.all()
+    all_posts = all_posts.order_by("-timestamp").all()
+    paginator = Paginator(all_posts, 10)
 
+    if request.GET.get('page'):
+        page_number = request.GET.get('page')
+    else: 
+        page_number = 1
+
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'network/index.html', {
+        'page_obj': page_obj
+    })
+  
+def following(request):
+
+    #Get the posts of followed users, if no posts display message
+    posts = Post.objects.filter(poster__in = request.user.set_following())
+    if posts.count() == 0:
+        return render(request, 'network/following.html', {
+            "message": "No users followed so far"
+        })
+
+    posts = posts.order_by("-timestamp").all()
+    paginator = Paginator(posts, 10)
+
+    if request.GET.get('page'):
+        page_number = request.GET.get('page')
+    else: 
+        page_number = 1
+
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'network/following.html', {
+        'page_obj': page_obj
+    })
+
+
+def user_page(request, username):
+
+    #Get user 
+    user_to_view = User.objects.get(username = username)
+
+    #Get posts, if no posts display message
+    posts = Post.objects.filter(poster = user_to_view)
+    if posts.count() == 0:
+        return render(request, 'network/user_page.html', {
+            "user_to_view": user_to_view,
+            "message": "No posts so far for this user"
+        })
+
+    posts = posts.order_by("-timestamp").all()
+    paginator = Paginator(posts, 10)
+
+    if request.GET.get('page'):
+        page_number = request.GET.get('page')
+    else: 
+        page_number = 1
+    
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "network/user_page.html", {
+        "user_to_view": user_to_view, 
+        'page_obj': page_obj
+    })
 
 def login_view(request):
     if request.method == "POST":
@@ -69,15 +130,7 @@ def register(request):
         return render(request, "network/register.html")
 
 
-def user_page(request, username):
 
-    #Get user 
-    user = User.objects.get(username = username)
-
-    #Render user page
-    return render(request, "network/user_page.html", {
-        "user": user
-    })
 
 #########################################################################
 #API views
@@ -107,12 +160,20 @@ def get_posts(request, set_name):
     if set_name == "all":
         posts = Post.objects.all()
     elif set_name == "following":
-        posts = Post.objects.filter(poster__in = request.user.set_following())
-    elif set_name == "own":
-        posts = Post.objects.filter(poster = request.user)
+        try: 
+            posts = Post.objects.filter(poster__in = request.user.set_following())
+        except:
+            return JsonResponse({"error": "No users followed so far"}, status=400)
     else:
-        return JsonResponse({"error": "Invalid set of posts"}, status=400)
+        #Check for particular user
+        try: 
+            user = User.objects.get(username = set_name)
+        except User.DoesNotExist:
+            return JsonResponse({"error": "Set of posts not found"}, status=400)
+
+        #If the user exists then take all posts made by him
+        posts = Post.objects.filter(poster = user)
 
     #return posts in reverse chronological order
     posts = posts.order_by("-timestamp").all()
-    return JsonResponse([post.serialize() for post in posts], safe=False)
+    return JsonResponse([post.serialize() for post in posts], safe=False, status=201)

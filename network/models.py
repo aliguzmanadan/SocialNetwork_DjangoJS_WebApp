@@ -9,6 +9,9 @@ import network
 
 class User(AbstractUser):
 
+    def __str__(self):
+        return f"{self.username}"
+
     def set_following(self):
         """Returns a set with all Users followed by this user"""
         return set([rel.followed for rel in self.followed.all()])

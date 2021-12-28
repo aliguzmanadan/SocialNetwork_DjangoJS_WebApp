@@ -3,6 +3,7 @@
 
 {% block body %}
     <div id="session_name">
+        <h5>All Posts</h5>
     </div>
 
     {% if user.is_authenticated%}
@@ -15,11 +16,10 @@
         </div>
     {% endif %}
 
-    <div id="session_posts">
-        A
-    </div>
+    {% include "./display_posts.html" %}
+
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'network/index.js' %}"></script>
+   <script type="module" src="{% static 'network/index.js' %}"></script> 
 {% endblock %}
