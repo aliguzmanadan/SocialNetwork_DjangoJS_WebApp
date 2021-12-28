@@ -4,7 +4,22 @@
 {% block body %}
     <div id="session_name">
         <h5>{{ user_to_view.username }}</h5>
+
+        {% if user != user_to_view%}
+            {% if user.is_authenticated %}
+                <a  href="{% url 'follow_unfollow' user_to_view.username %}">
+                    <button type="button" class="btn btn-primary">
+                        {% if followed_status %}
+                            Unfollow
+                        {% else %}
+                            Follow
+                        {% endif %}
+                    </button>
+                </a>
+            {% endif %}
+        {% endif %}
     </div>
+
 
     <div>
         <ul>

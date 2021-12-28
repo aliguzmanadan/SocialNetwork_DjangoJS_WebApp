@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 
-from .models import Post, User
+from .models import Following, Post, User
 
 
 def index(request):
@@ -52,15 +52,20 @@ def following(request):
 
 def user_page(request, username):
 
-    #Get user 
+    #Get user and check if it is being followed
     user_to_view = User.objects.get(username = username)
+    if request.user.is_authenticated:
+        followed_status = request.user.is_follower(user_to_view)
+    else:
+        followed_status = None
 
     #Get posts, if no posts display message
     posts = Post.objects.filter(poster = user_to_view)
     if posts.count() == 0:
         return render(request, 'network/user_page.html', {
             "user_to_view": user_to_view,
-            "message": "No posts so far for this user"
+            "message": "No posts so far for this user",
+            "followed_status": followed_status
         })
 
     posts = posts.order_by("-timestamp").all()
@@ -75,8 +80,21 @@ def user_page(request, username):
 
     return render(request, "network/user_page.html", {
         "user_to_view": user_to_view, 
-        'page_obj': page_obj
+        'page_obj': page_obj,
+        "followed_status": followed_status
     })
+
+
+def follow_unfollow(request, username):
+    another_user=User.objects.get(username=username)
+    if request.user.is_follower(another_user):
+        Following.objects.filter(followed = another_user, follower = request.user).delete()
+    else:
+        f = Following(followed = another_user, follower = request.user)
+        f.save()
+    
+    return HttpResponseRedirect(reverse("user_page", args=(username,)))
+
 
 def login_view(request):
     if request.method == "POST":

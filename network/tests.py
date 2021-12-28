@@ -18,6 +18,9 @@ class NetworkTestCase(TestCase):
         Post.objects.create(poster=u1, content="U1 post 2")
         Post.objects.create(poster=u2, content="U2 post 1")
 
+        #Create dummy following
+        Following.objects.create(follower=u2, followed=u1)
+
 
     def test_users(self):
         self.assertEqual(User.objects.count(),2)
@@ -39,3 +42,13 @@ class NetworkTestCase(TestCase):
         response = c.get("/posts/user1")
         self.assertEqual(response.status_code, 201)
         #self.assertEqual(len(response.headers),3)
+
+    def test_following_true(self):
+        u1 = User.objects.get(username="user1")
+        u2 = User.objects.get(username="user2")
+        self.assertTrue(u2.is_follower(u1))
+
+    def test_following_false(self):
+        u1 = User.objects.get(username="user1")
+        u2 = User.objects.get(username="user2")
+        self.assertFalse(u1.is_follower(u2))

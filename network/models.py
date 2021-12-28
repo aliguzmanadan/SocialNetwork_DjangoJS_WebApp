@@ -26,6 +26,10 @@ class User(AbstractUser):
     def NumberFollowing(self):
         return len(self.set_following())
 
+    def is_follower(self, another_user):
+        """Returns a boolean value depending on whether self follows another_user"""
+        return self in another_user.set_followers()
+
 #Create a separate class "Following" to instance each following relation.
 class Following(models.Model):
     followed = ForeignKey(User, on_delete=models.CASCADE, related_name="followers")
