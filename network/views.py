@@ -195,3 +195,24 @@ def get_posts(request, set_name):
     #return posts in reverse chronological order
     posts = posts.order_by("-timestamp").all()
     return JsonResponse([post.serialize() for post in posts], safe=False, status=201)
+
+@csrf_exempt
+@login_required
+def individual_post(request, post_id):
+
+    #Querey for requested post
+    try:
+        post = Post.objects.get(poster=request.user, pk=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
+
+    #Update content of post
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        post.content = data["content"]
+        post.save()
+        return HttpResponse(status=204)
+
+    #Request musb use only put request
+    else:
+        return JsonResponse({"error": "PUT request reqired"}, status=400)

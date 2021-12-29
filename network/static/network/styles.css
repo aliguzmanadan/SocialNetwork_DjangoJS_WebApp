@@ -23,6 +23,11 @@ form{
     margin: 10px;
 }
 
+.btn-link{
+    margin: 0px;
+    padding: 0px;
+}
+
 #likes_number{
     margin-left: 10px;
 }
