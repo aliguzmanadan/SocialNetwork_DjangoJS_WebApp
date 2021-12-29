@@ -7,11 +7,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // By default, load all posts
     //load_posts('all');
-   
-    
   });
 
+
+//////////////////
+
+function submit_post(){
+    
+    //Get content of the form
+    const content = document.querySelector('#content').value; 
+    console.log(content)
+
+    //submit the post via POST request to the API
+    fetch('/posts', {
+        method: 'POST',
+        body: JSON.stringify({
+            content: content
+        })
+      })
+      .then(response => response.json())
+      .then(result => {
+          // Print result
+          console.log(result);
+      });
+
+    //Reload page
+    window.location.reload(true);
+
+
+    //Stop form from submitting
+    return false;
+}
+
 ////////////////
+//These functions are not used, the belong to a previous implementation of he project
+///////////////
 
 function load_posts(posts_set){
     document.querySelector('#session_name').innerHTML = `<h3>${posts_set.charAt(0).toUpperCase() + posts_set.slice(1)}</h3>`;
@@ -65,31 +95,3 @@ function display_post(post){
 
 }
 
-//////////////////
-
-function submit_post(){
-    
-    //Get content of the form
-    const content = document.querySelector('#content').value; 
-    console.log(content)
-
-    //submit the post via POST request to the API
-    fetch('/posts', {
-        method: 'POST',
-        body: JSON.stringify({
-            content: content
-        })
-      })
-      .then(response => response.json())
-      .then(result => {
-          // Print result
-          console.log(result);
-      });
-
-    //Reload page
-    window.location.reload(true);
-
-
-    //Stop form from submitting
-    return false;
-}

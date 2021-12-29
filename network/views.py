@@ -211,8 +211,11 @@ def individual_post(request, post_id):
         data = json.loads(request.body)
         if data.get("content") is not None:
             post.content = data["content"]
-        if data.get("like") is not None and data["like"] == True:
-            post.likes.add(request.user)
+        if data.get("like") is not None:
+            if data["like"] == True:
+                post.likes.add(request.user)
+            else:
+                post.likes.remove(request.user)
         post.save()
         return JsonResponse({"message": "Post edited / like saved successfully."}, status=201)
 
