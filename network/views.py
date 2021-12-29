@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 
 from .models import Following, Post, User
+from .forms import PostForm
 
 
 def index(request):
@@ -24,7 +25,8 @@ def index(request):
 
     page_obj = paginator.get_page(page_number)
     return render(request, 'network/index.html', {
-        'page_obj': page_obj
+        'page_obj': page_obj,
+        "form": PostForm()
     })
   
 def following(request):
@@ -94,6 +96,21 @@ def follow_unfollow(request, username):
         f.save()
     
     return HttpResponseRedirect(reverse("user_page", args=(username,)))
+
+def newpost(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+
+        if form.is_valid():
+            #Isolate info from form
+            content = form.cleaned_data["content"]
+
+            #Create new post
+            new_post = Post(poster=request.user, content=content)
+            new_post.save()
+
+            #redirect to index page
+            return HttpResponseRedirect(reverse("index"))
 
 
 def login_view(request):
