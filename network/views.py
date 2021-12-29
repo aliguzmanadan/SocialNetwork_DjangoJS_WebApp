@@ -211,7 +211,7 @@ def individual_post(request, post_id):
         data = json.loads(request.body)
         post.content = data["content"]
         post.save()
-        return HttpResponse(status=204)
+        return JsonResponse({"message": "Post edited successfully."}, status=201)
 
     #Request musb use only put request
     else:
