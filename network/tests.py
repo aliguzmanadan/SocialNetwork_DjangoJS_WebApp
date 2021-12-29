@@ -52,3 +52,11 @@ class NetworkTestCase(TestCase):
         u1 = User.objects.get(username="user1")
         u2 = User.objects.get(username="user2")
         self.assertFalse(u1.is_follower(u2))
+
+    def test_like_true(self):
+        u1 = User.objects.get(username="user1")
+        u2 = User.objects.get(username="user2")
+        post = Post.objects.get(poster=u1, content="U1 post 1")
+
+        post.likes.add(u2)
+        self.assertTrue(post.liked_by(u2))

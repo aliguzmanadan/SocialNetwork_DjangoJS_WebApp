@@ -1,8 +1,4 @@
-//import { load_posts,  submit_post} from './functions.js';
-
 document.addEventListener('DOMContentLoaded', function() {
-
-    
 
     // Use links in the top of the page to toggle between views
     //document.querySelector('#all_posts_link').addEventListener('click', () => load_posts('all'));

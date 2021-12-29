@@ -1,5 +1,5 @@
 1. Save a post
-To sava new post, you can send a POST request to the /posts route. 
+To save new post, you can send a POST request to the /posts route. 
 The route requires tonly one pice of data to be submitted: the content of the post.
  For example, you could write JavaScript code like
 
@@ -29,3 +29,25 @@ fetch('/posts/<set_name>')
     console.log(posts);
 });
 ///////////////////////////////////////////
+
+3. Edit post
+
+///////////////////////////////////////////
+fetch('/post/<post_id>', {
+    method: 'PUT',
+    body: JSON.stringify({
+        content: "New content"
+    })
+  })
+  ///////////////////////////////////////////
+
+4. Like post
+
+///////////////////////////////////////////
+fetch('/post/<post_id>', {
+    method: 'PUT',
+    body: JSON.stringify({
+        like: true
+    })
+  })
+  ///////////////////////////////////////////

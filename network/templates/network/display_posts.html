@@ -12,14 +12,28 @@
             <div class="card">
                 <div class="card-body" data-post_id = {{post.id}}>
                     <h5 class="card-title"> <a href="{% url 'user_page' post.poster %}">{{post.poster}}</a> </h5>
+
                     {% if user.is_authenticated and user == post.poster%}
                         <button type="button" class="btn btn-link" id="edit_button">Edit</button>
                     {% endif %}
+
                     <div id="content">
                         <p class="card-text" id="post_content"> {{ post.content }}</p>
                     </div>
                     <p class="card-text"> <small class="text-muted">{{post.timestamp}}</small></p>
-                    <i class="bi bi-suit-heart-fill"> <small class="text-muted" id="likes_number">0</small> </i>
+
+                    {% if user.is_authenticated%}
+
+                        {% if user in post.set_liked_by %}
+                            <i class="bi bi-suit-heart-fill" id="like_button"></i>
+                        {% else %}
+                            <i class="bi bi-suit-heart" id="like_button"></i>
+                        {% endif%}
+
+                    {% else %}
+                        <i class="bi bi-suit-heart" id="like_button_disabled"> </i>
+                    {% endif %}
+                    <small class="text-muted" id="likes_number"> {{ post.NumberLikes }} </small> 
                 </div>
 
             </div>

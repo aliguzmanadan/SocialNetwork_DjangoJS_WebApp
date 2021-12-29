@@ -53,3 +53,12 @@ class Post(models.Model):
             "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p"),
             "likes": 0
         }
+
+    def NumberLikes(self):
+        return self.likes.count()
+
+    def liked_by(self, user1):
+        return user1 in self.likes.all()
+
+    def set_liked_by(self):
+        return set([user for user in self.likes.all()])

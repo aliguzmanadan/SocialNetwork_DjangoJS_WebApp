@@ -39,3 +39,7 @@ form{
 #session_name{
     margin: 10px;
 }
+
+#like_button{
+    cursor: pointer;
+}

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
         //Get parent of the target of the event
         const element = event.target;
 
-        if (element.className === 'btn btn-link'){
+        if (element.id === 'edit_button'){
 
             //Get parent element 
             const post_div = element.parentElement;

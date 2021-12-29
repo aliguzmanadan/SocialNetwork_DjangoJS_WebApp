@@ -202,17 +202,20 @@ def individual_post(request, post_id):
 
     #Querey for requested post
     try:
-        post = Post.objects.get(poster=request.user, pk=post_id)
+        post = Post.objects.get(pk=post_id)
     except Post.DoesNotExist:
         return JsonResponse({"error": "Post not found."}, status=404)
 
     #Update content of post
     if request.method == "PUT":
         data = json.loads(request.body)
-        post.content = data["content"]
+        if data.get("content") is not None:
+            post.content = data["content"]
+        if data.get("like") is not None and data["like"] == True:
+            post.likes.add(request.user)
         post.save()
-        return JsonResponse({"message": "Post edited successfully."}, status=201)
+        return JsonResponse({"message": "Post edited / like saved successfully."}, status=201)
 
-    #Request musb use only put request
+    #Request must use only put request
     else:
         return JsonResponse({"error": "PUT request reqired"}, status=400)
